@@ -8,6 +8,7 @@ DHT11(Humedad y Temperatura del ambiente) -Sensor Laser(VLX53L0X)-Sensor De LLuv
 Este backend consiste en hacer la lectura de los sensores y recopilarla y despues hacer el envio
 por EspNow a otro Esp para dibujar en Frontend
 */
+#include <Wire.h>
 #include <DHT11.h>
 #include <Adafruit_VL53L0X.h>
 #include <Ultrasonic.h>
@@ -16,6 +17,10 @@ por EspNow a otro Esp para dibujar en Frontend
 #define sensorLluviaPin 34  //pin de sensor de lluvia
 #define TRIGGER_PIN 14      // Pin del Arduino conectado al pin TRIG del sensor
 #define ECHO_PIN 12         // Pin del Arduino conectado al pin ECHO del sensor
+
+//direcciones i2c
+#define ESP32_SENDER_ADDRESS 0x10
+#define ESP32_RECEIVER_ADDRESS 0x20
 
 //variables capturadas por el backend
 double humedad;
@@ -33,6 +38,7 @@ void setup() {
   }
 
   pinMode(sensorLluviaPin, INPUT);  //pin de sensor de lluvia
+  Wire.begin();//inicia la comunicacion i2c
 }
 
 void loop() {
@@ -41,7 +47,8 @@ void loop() {
 
   impresion();
 
-  //envio por espNow al frontend
+  // Envío de datos por I2C desde el ESP32 sender
+  enviarDatosI2C();
 
   delay(100);  //delay de envio
 }
@@ -79,4 +86,13 @@ void impresion() {
   Serial.print(lluvia);
   Serial.print(" - ");
   Serial.println(velocidad);
+}
+
+void enviarDatosI2C() {
+  Wire.beginTransmission(ESP32_RECEIVER_ADDRESS); //escritura i2c hacia esp32 esclavo
+  Wire.write((uint8_t*)&humedad, sizeof(double));
+  Wire.write((uint8_t*)&temperatura, sizeof(double));
+  Wire.write((uint8_t*)&lluvia, sizeof(double));
+  Wire.write((uint8_t*)&velocidad, sizeof(double));
+  Wire.endTransmission();
 }
