@@ -18,17 +18,15 @@ por EspNow a otro Esp para dibujar en Frontend
 #define TRIGGER_PIN 14      // Pin del Arduino conectado al pin TRIG del sensor
 #define ECHO_PIN 12         // Pin del Arduino conectado al pin ECHO del sensor
 
-//direcciones i2c
 #define ESP32_SENDER_ADDRESS 0x10
 #define ESP32_RECEIVER_ADDRESS 0x20
 
-//variables capturadas por el backend
 double humedad;
 double temperatura;
 double velocidad;
 double lluvia;
 
-Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);  // Creamos una instancia del sensor
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);  //instancia del sensor
 DHT11 dht11(dhtPin);                           //Objeto de sensor DHT11
 
 void setup() {
@@ -37,20 +35,18 @@ void setup() {
     delay(1);  // espere hasta que se abra el puerto serie para dispositivos USB nativos
   }
 
-  pinMode(sensorLluviaPin, INPUT);  //pin de sensor de lluvia
-  Wire.begin();//inicia la comunicacion i2c
+    pinMode(sensorLluviaPin, INPUT);  //pin de sensor de lluvia
+  Wire.begin(); // Inicializa la comunicación I2C
 }
 
 void loop() {
-
-  lectura();  //lectura de sensores
-
+ lectura();  //lectura de sensores
   impresion();
-
-  // Envío de datos por I2C desde el ESP32 sender
+  
+  // Envío de datos por I2C
   enviarDatosI2C();
-
-  delay(100);  //delay de envio
+  
+  delay(100);
 }
 
 void lectura() {
@@ -89,7 +85,7 @@ void impresion() {
 }
 
 void enviarDatosI2C() {
-  Wire.beginTransmission(ESP32_RECEIVER_ADDRESS); //escritura i2c hacia esp32 esclavo
+  Wire.beginTransmission(ESP32_RECEIVER_ADDRESS);
   Wire.write((uint8_t*)&humedad, sizeof(double));
   Wire.write((uint8_t*)&temperatura, sizeof(double));
   Wire.write((uint8_t*)&lluvia, sizeof(double));
