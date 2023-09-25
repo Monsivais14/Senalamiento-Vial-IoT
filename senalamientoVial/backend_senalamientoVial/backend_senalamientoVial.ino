@@ -9,11 +9,12 @@ Este backend consiste en hacer la lectura de los sensores y recopilarla y despue
 por EspNow a otro Esp para dibujar en Frontend
 */
 #include <Wire.h>
-#include <DHT11.h>
+#include <DHT.h>
 #include <Adafruit_VL53L0X.h>
 #include <Ultrasonic.h>
 
-#define dhtPin 5            //pin de sensor dht
+#define DHTPIN 5            //pin de sensor dht
+#define DHTTYPE DHT11 // Tipo de sensor DHT (DHT11, DHT21 o DHT22)
 #define sensorLluviaPin 34  //pin de sensor de lluvia
 #define TRIGGER_PIN 14      // Pin del Arduino conectado al pin TRIG del sensor
 #define ECHO_PIN 12         // Pin del Arduino conectado al pin ECHO del sensor
@@ -27,32 +28,33 @@ double velocidad;
 double lluvia;
 
 Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);  //instancia del sensor
-DHT11 dht11(dhtPin);                           //Objeto de sensor DHT11
+DHT dht(DHTPIN, DHTTYPE);                     //Objeto de sensor DHT11
 
 void setup() {
   Serial.begin(115200);  //comunicacion serial
   while (!Serial) {
     delay(1);  // espere hasta que se abra el puerto serie para dispositivos USB nativos
   }
-
-    pinMode(sensorLluviaPin, INPUT);  //pin de sensor de lluvia
-  Wire.begin(); // Inicializa la comunicación I2C
+  pinMode(2,OUTPUT);
+  pinMode(sensorLluviaPin, INPUT);  //pin de sensor de lluvia
+  Wire.begin();                     // Inicializa la comunicación I2C
 }
 
 void loop() {
- lectura();  //lectura de sensores
+  lectura();  //lectura de sensores
   impresion();
-  
+  digitalWrite(2,HIGH);
   // Envío de datos por I2C
   enviarDatosI2C();
-  
+
   delay(100);
+  digitalWrite(2,LOW);
 }
 
 void lectura() {
   //metodo de lectura de lectura
-  temperatura = dht11.readTemperature();  //lectura de temperatura ambiente
-  humedad = dht11.readHumidity();         //lectura de humedad
+  temperatura = dht.readTemperature();  //lectura de temperatura ambiente
+  humedad = dht.readHumidity();         //lectura de humedad
   lluvia = analogRead(sensorLluviaPin);   //lectura digital de sensor de lluvia
   velocidad = calcular_velocidad();       //lectura de velocidad
 }
