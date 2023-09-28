@@ -1,6 +1,6 @@
 # Proyecto: Señalamiento Vial Inteligente Programable
 
-![Señalamiento Vial - Prototipo de pruebas]
+Señalamiento Vial - Prototipo de pruebas
 
 ## Descripción
 
@@ -26,8 +26,6 @@ El proyecto "Señalamiento Vial Inteligente Programable" es un prototipo en desa
 
 - Para el esclavo:
   - Bibliotecas utilizadas: TFT_eSPI, Wire, SD y SPI.
-
-## Uso
 
 ## Uso
 
