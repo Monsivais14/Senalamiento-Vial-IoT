@@ -50,7 +50,6 @@ void setup() {
 }
 
 void loop() {
-  // Tu código de loop, si es necesario.
 }
 
 void drawBMP(const char *filename, int16_t x, int16_t y) {
@@ -85,8 +84,8 @@ void drawBMP(const char *filename, int16_t x, int16_t y) {
             uint8_t b = *bptr++;
             uint8_t g = *bptr++;
             uint8_t r = *bptr++;
-            uint16_t color = tft.color565(r, g, b);  // Convertir y mostrar en pantalla
-            tft.drawPixel(x + j, y + i, color);      // Utilizar drawPixel en lugar de pushPixel
+            uint16_t color = tft.color565(r, g, b); 
+            tft.drawPixel(x + j, y + i, color);    
           }
         }
       }
