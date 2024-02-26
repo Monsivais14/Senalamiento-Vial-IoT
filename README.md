@@ -1,4 +1,4 @@
-# Proyecto: Señalamiento Vial Inteligente Programable
+# Proyecto: Señalamiento Vial Inteligente Programable (Primer prototipo temprano de prueba de sensores con Esp32)
 
 Señalamiento Vial - Prototipo de pruebas
 
